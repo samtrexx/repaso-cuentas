@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const register = async (req, res) => {
     const { email, password:Npassword } = req.body;
-
+ 
     if (!email || !Npassword) return res.json({ status: "error", message: "Todos los campos son obligatorios" });
       else{
         //prueba de coneccion loggedin
@@ -14,6 +14,7 @@ const register = async (req, res) => {
             if (err) throw err;
             if(result[0])return res.json({status: "error", error: "Usuario ya registrado"})
                 else{
+                    //Hash de contraseña
                     const password = await  bcrypt.hash(Npassword, 8);
                     //console.log(password); //Prueba loggedIN
                     db.query('INSERT INTO users SET ?', {email: email,password: password}, (error, results) =>{
