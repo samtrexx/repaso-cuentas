@@ -3,9 +3,9 @@ const db = require("../routes/db-config");
 const bcrypt = require("bcryptjs");
 
 const register = async (req, res) => {
-    const { email, password:Npassword } = req.body;
+    const { email, password:Npassword, username } = req.body;
  
-    if (!email || !Npassword) return res.json({ status: "error", message: "Todos los campos son obligatorios" });
+    if (!email || !username || !Npassword) return res.json({ status: "error", message: "Todos los campos son obligatorios" });
       else{
         //prueba de coneccion loggedin
         //console.log(email);
@@ -17,7 +17,7 @@ const register = async (req, res) => {
                     //Hash de contraseña
                     const password = await  bcrypt.hash(Npassword, 8);
                     //console.log(password); //Prueba loggedIN
-                    db.query('INSERT INTO users SET ?', {email: email,password: password}, (error, results) =>{
+                    db.query('INSERT INTO users SET ?', { email: email, username: username, password: password }, (error, results) =>{
                         if(error) throw error; 
                         return res.json({ status: "success", success: "Usuario se ha regitrado"})
 
